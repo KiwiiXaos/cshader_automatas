@@ -1,0 +1,36 @@
+﻿#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+float Resolution;
+
+[numthreads(8,8,1)]
+
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float2 co = float2(id.x, id.y);
+    int real = round(frac(sin(dot(co,float2(12.9898,78.233)*2.0)) * 43758.5453));
+
+    /*
+
+    if(value > 0.5)
+    {
+        value = 0;
+    }
+    else
+    {
+        value = 1;
+    }
+    int real = round(value);
+    */
+    Result[id.xy] = float4(255*real,255*real,255*real,real);
+
+}
+
+
+void CSNice (uint3 id : SV_DispatchThreadID)
+{
+
+    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+}
+
